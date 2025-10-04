@@ -9,6 +9,7 @@ import {
   Boxes,
   ChevronDown,
   ChevronLeft,
+  LogOut,
   Menu,
   Ruler,
   Utensils,
@@ -16,6 +17,16 @@ import {
 import { usePathname } from 'next/navigation'
 import { ReactNode, useState } from 'react'
 import Link from 'next/link'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 type RouteGroupType = {
   group: string
@@ -116,14 +127,53 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className='flex'>
-      <Collapsible.Root open={open} onOpenChange={setOpen}>
-        <Collapsible.Trigger asChild>
+    <div className='bg-background fixed z-10 flex h-13 w-screen items-center justify-between border px-2'>
+      <Collapsible.Root className='h-full' open={open} onOpenChange={setOpen}>
+        <Collapsible.Trigger className='m-2' asChild>
           <Button size={'icon'} variant={'outline'}>
             <Menu />
           </Button>
         </Collapsible.Trigger>
       </Collapsible.Root>
+      <div className='flex'>
+        <ThemeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant='ghost'
+              className='flex h-9 items-center gap-2 px-2'
+            >
+              <Avatar className='size-8'>
+                <AvatarFallback>A</AvatarFallback>
+              </Avatar>
+              <span className='hidden md:inline'>Admin</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end' className='w-56'>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            <div className='flex items-center gap-3 px-2 py-1.5'>
+              <Avatar className='size-10'>
+                <AvatarFallback>A</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className='text-sm font-medium'>Admin</p>
+                <p className='text-muted-foreground text-xs'>admin@test.com</p>
+              </div>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                // logout
+              }}
+              variant='destructive'
+            >
+              <LogOut className='size-4' /> Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       <Collapsible.Root
         className='fixed top-0 left-0 z-20 h-dvh'
